@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:tourist_app/screens/auth/login_screen.dart';
+import 'package:tourist_app/screens/auth/stores/register_store.dart';
 import 'package:tourist_app/screens/auth/widgets/custom_button_widget.dart';
-import 'package:tourist_app/services/auth_service.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({Key? key}) : super(key: key);
@@ -13,10 +13,8 @@ class RegisterScreen extends StatefulWidget {
 
 class _RegisterScreenState extends State<RegisterScreen> {
   final TextEditingController emailController = TextEditingController();
-
   final TextEditingController passwordController = TextEditingController();
-
-  bool visibility = true;
+  final _registerStore = RegisterStore();
 
   @override
   Widget build(BuildContext context) {
@@ -35,74 +33,69 @@ class _RegisterScreenState extends State<RegisterScreen> {
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20),
-        child: Column(
-          children: [
-            TextField(
-              keyboardType: TextInputType.emailAddress,
-              controller: emailController,
-              decoration: InputDecoration(
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(20.0),
-                ),
-                labelText: "Введите почту",
-              ),
-            ),
-            const SizedBox(height: 10),
-            TextField(
-              obscureText: visibility,
-              controller: passwordController,
-              decoration: InputDecoration(
-                  suffixIcon: GestureDetector(
-                    onLongPressUp: () {
-                      setState(() {
-                        visibility = !visibility;
-                      });
-                    },
-                    onLongPressDown: (details) {
-                      setState(() {
-                        visibility = !visibility;
-                      });
-                    },
-                    child: visibility
-                        ? const Icon(Icons.visibility_off)
-                        : const Icon(Icons.visibility),
-                  ),
+        child: Observer(
+          builder: (context) => Column(
+            children: [
+              TextField(
+                keyboardType: TextInputType.emailAddress,
+                controller: emailController,
+                decoration: InputDecoration(
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(20.0),
                   ),
-                  labelText: 'Введите пароль'),
-            ),
-            CustomButtonWidget(
-              onPressed: () async {
-                var _result = await context.read<AuthService>().signUp(
-                      email: emailController.text.trim(),
-                      password: passwordController.text.trim(),
-                    );
-                _result
-                    ? Navigator.pushNamedAndRemoveUntil(
-                        context, '/main', (route) => false)
-                    : null;
-              },
-              childText: "Зарегистрироваться",
-            ),
-            const SizedBox(
-              height: 2,
-            ),
-            TextButton(
-              style: TextButton.styleFrom(
-                minimumSize: Size.zero,
-                padding: EdgeInsets.zero,
-                tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-              ),
-              onPressed: () => Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const LoginScreen(),
+                  labelText: "Введите почту",
                 ),
               ),
-              child: const Text('Уже есть аккаунт? Войти'),
-            ),
-          ],
+              const SizedBox(height: 10),
+              TextField(
+                obscureText: _registerStore.visibility,
+                controller: passwordController,
+                decoration: InputDecoration(
+                    suffixIcon: GestureDetector(
+                      onLongPressUp: () {
+                        _registerStore.toggleVisibility;
+                      },
+                      onLongPressDown: (details) {
+                        _registerStore.toggleVisibility;
+                      },
+                      child: _registerStore.visibility
+                          ? const Icon(Icons.visibility_off)
+                          : const Icon(Icons.visibility),
+                    ),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(20.0),
+                    ),
+                    labelText: 'Введите пароль'),
+              ),
+              CustomButtonWidget(
+                onPressed: () async {
+                  await _registerStore.register(
+                    context,
+                    emailController.text.trim(),
+                    passwordController.text.trim(),
+                  );
+                },
+                childText: "Зарегистрироваться",
+              ),
+              const SizedBox(
+                height: 2,
+              ),
+              TextButton(
+                style: TextButton.styleFrom(
+                  minimumSize: Size.zero,
+                  padding: EdgeInsets.zero,
+                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                ),
+                onPressed: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const LoginScreen(),
+                  ),
+                ),
+                child: const Text('Уже есть аккаунт? Войти'),
+              ),
+            ],
+          ),
         ),
       ),
     );

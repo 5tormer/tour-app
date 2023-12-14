@@ -171,15 +171,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       GestureDetector(
                         onTap: () {
                           _showMyDialog(() async {
-                            await setDescriptionData(
-                              db: firebaseFirestoreService,
-                              userEmail: context.read<User?>()!.email!,
-                              text: _descriptionTextController.text,
-                            );
-                            await getDescriptionData(
-                              db: firebaseFirestoreService,
-                              userEmail: context.read<User?>()!.email!,
-                            );
+                            // await setDescriptionData(
+                            //   db: firebaseFirestoreService,
+                            //   userEmail: context.read<User?>()!.email!,
+                            //   text: _descriptionTextController.text,
+                            // );
+                            // await getDescriptionData(
+                            //   db: firebaseFirestoreService,
+                            //   userEmail: context.read<User?>()!.email!,
+                            // );
                           });
                         },
                         child: Padding(

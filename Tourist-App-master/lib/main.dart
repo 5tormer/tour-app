@@ -21,11 +21,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        Provider<AuthService>(
-          create: (_) => AuthService(),
-        ),
         StreamProvider<User?>(
-          create: (context) => context.read<AuthService>().authStateChanges,
+          create: (context) => AuthService().authStateChanges,
           initialData: null,
         ),
       ],
