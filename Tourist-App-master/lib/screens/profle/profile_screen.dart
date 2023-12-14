@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tourist_app/screens/profle/stores/profile_store.dart';
 import 'package:tourist_app/services/auth_service.dart';
+import 'package:tourist_app/theme/stores/theme_store.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({Key? key}) : super(key: key);
@@ -12,6 +13,7 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
+  late ThemeStore themeStore;
   final _authService = AuthService();
   final controller = TextEditingController();
   String? description;
@@ -21,14 +23,27 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   @override
   void initState() {
+    super.initState();
     Future.delayed(const Duration(milliseconds: 200)).then((value) =>
         _profileStore.init(userEmail: _authService.currentUser!.email!));
-    super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    themeStore = context.read<ThemeStore>();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        onPressed: themeStore.toggleTheme,
+        child: themeStore.isDark
+            ? const Icon(Icons.brightness_high)
+            : const Icon(Icons.brightness_2),
+      ),
       body: Consumer<User?>(
         builder: (_, user, ___) {
           return user == null

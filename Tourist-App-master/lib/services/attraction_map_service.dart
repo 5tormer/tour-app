@@ -12,3 +12,19 @@ class AttractionMapService {
         .toList();
   }
 }
+
+// class Repo {
+//   final AttractionMapService serivce;
+//   final CacheService cacheService;
+
+//   Repo(this.serivce);
+
+//   Future<void> getAttraction() async {
+//     final res = await serivce.getAttraction();
+//     if (res.statusCode != 200) {
+//       res = cacheService.data;
+//     }
+
+//     return res;
+//   }
+// }
