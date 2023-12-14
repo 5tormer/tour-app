@@ -1,9 +1,7 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:tourist_app/screens/attraction_map/attraction_map_screen.dart';
+import 'package:tourist_app/screens/main/stores/main_store.dart';
 import 'package:tourist_app/screens/profle/profile_screen.dart';
-import 'package:tourist_app/services/auth_service.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({Key? key}) : super(key: key);
@@ -13,6 +11,7 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
+  final _mainStore = MainStore();
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
@@ -22,12 +21,7 @@ class _MainScreenState extends State<MainScreen> {
           actions: [
             IconButton(
               onPressed: () async {
-                await context.read<AuthService>().signOut();
-
-                context.read<User?>() == null
-                    ? Navigator.pushNamedAndRemoveUntil(
-                        context, '/', (route) => false)
-                    : null;
+                await _mainStore.signOut(context);
               },
               icon: const Icon(
                 Icons.logout,
