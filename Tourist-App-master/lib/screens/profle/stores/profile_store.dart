@@ -63,10 +63,7 @@ abstract class _ProfileStoreBase with Store {
 
   @action
   Future<void> showMyDialog(
-    BuildContext context,
-    TextEditingController controller,
-    void Function() onPressed,
-  ) async {
+      BuildContext context, TextEditingController controller) async {
     return showDialog<void>(
       context: context,
       builder: (BuildContext context) {

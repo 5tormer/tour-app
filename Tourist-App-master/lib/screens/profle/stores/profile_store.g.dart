@@ -92,10 +92,10 @@ mixin _$ProfileStore on _ProfileStoreBase, Store {
       AsyncAction('_ProfileStoreBase.showMyDialog', context: context);
 
   @override
-  Future<void> showMyDialog(BuildContext context,
-      TextEditingController controller, void Function() onPressed) {
+  Future<void> showMyDialog(
+      BuildContext context, TextEditingController controller) {
     return _$showMyDialogAsyncAction
-        .run(() => super.showMyDialog(context, controller, onPressed));
+        .run(() => super.showMyDialog(context, controller));
   }
 
   @override
